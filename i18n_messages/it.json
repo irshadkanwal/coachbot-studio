@@ -1,0 +1,33 @@
+{
+  "CoachDetails": {
+    "tooltips": {
+      "conversationsDisabled": "Non hai il consenso dell'utente finale per accedere a questi dati di conversazione"
+    }
+  },
+  "Config": {
+    "sidebarOptions": {
+      "6": {
+        "title": "Integrazione SMS",
+        "description": "Abilita l'accesso SMS al tuo Coach IA"
+      }
+    }
+  },
+  "General": {
+    "Header": {
+      "navigation": {
+        "0": "Chiacchierata",
+        "1": "Istruzioni",
+        "2": "Configurazione"
+      }
+    },
+    "errors": {
+      "publishingLimitReached": "Puoi pubblicare solo {limit} coach IA sul tuo piano attuale. Passa a un piano superiore per pubblicarne altri."
+    }
+  },
+  "SMSIntegrationPage": {
+    "notConnectedTitle": "Non connesso",
+    "connectedTitle": "Connesso",
+    "notConnectedDescription": "La sincronizzazione SMS non è ancora stata attivata.",
+    "connectedDescription": "La sincronizzazione SMS è attiva e funziona perfettamente!"
+  }
+}

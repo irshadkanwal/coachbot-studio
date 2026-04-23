@@ -1,0 +1,19 @@
+http:
+  routers:
+    http:
+      rule: 'Host(`localhost`)'
+      service: http
+      entryPoints:
+        - web
+      # entryPoints:
+      #   - websecure
+      # tls:
+      #   certResolver: letsencrypt
+      #   domains:
+      #     - main: "$DOMAIN_NAME"
+
+  services:
+    http:
+      loadBalancer:
+        servers:
+          - url: 'http://app-coachbotai:3000'

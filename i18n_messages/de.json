@@ -1,0 +1,83 @@
+{
+  "Checkout": {
+    "priceTable": {
+      "mostPopularLabel": "Am beliebtesten",
+      "activePlanButton": "Abonnement kündigen",
+      "unlockButton": "Jetzt freischalten",
+      "interval": {
+        "monthly": "Monatlich",
+        "yearly": "Jährlich"
+      },
+      "unsubscribeModal": {
+        "title": "Abonnementkündigung bestätigen",
+        "buttonTitle": "Abmelden",
+        "contentKey": "Möchten Sie Ihr \"{name}\"-Abonnement wirklich kündigen?",
+        "cancelButton": "Schließen"
+      },
+      "currentPlanLabel": "Ihr aktueller Plan",
+      "contactUsButton": "Kontaktieren Sie uns",
+      "contactForPricing": "Kontaktieren Sie uns",
+      "trialBanner": {
+        "title": "14 Tage kostenlos genießen",
+        "description": "Fügen Sie Ihre Kreditkarte hinzu, um zu aktivieren — Sie werden nur belastet, wenn Sie sich nach der Testphase entscheiden, fortzufahren."
+      }
+    },
+    "pricingTableConfig": {
+      "currencyLabel": "Wählen Sie Ihre bevorzugte Währung",
+      "promocodeLabel": "Haben Sie einen Promo-Code?",
+      "promocodePlaceholder": "Geben Sie Ihren Promo-Code ein"
+    },
+    "Prices": {
+      "titles": {
+        "0": "Für wen es ist",
+        "1": "Monatlicher Preis",
+        "2": "Loslegen",
+        "3": "Testphase"
+      },
+      "annuallyLabel": "({price} jährlich abgerechnet)",
+      "monthlyLabel": "monatlich"
+    }
+  },
+  "CoachDetails": {
+    "tooltips": {
+      "conversationsDisabled": "Sie haben keine Endbenutzer-Zustimmung, um auf diese Gesprächsdaten zuzugreifen"
+    }
+  },
+  "Config": {
+    "sidebarOptions": {
+      "6": {
+        "title": "SMS-Integration",
+        "description": "Aktivieren Sie SMS-Zugriff auf Ihren KI-Coach"
+      }
+    }
+  },
+  "Dashboard": {
+    "assistantCard": {
+      "publishModal": {
+        "title": "KI-Coach live schalten",
+        "content": "Sie sind dabei, diesen KI-Coach zu veröffentlichen. Sobald er live ist, wird dieser Coach für Benutzer verfügbar sein.\n\nBitte beachten Sie: Nach dem Live-Schalten können Sie keine Änderungen an den Datenschutzeinstellungen und der Monetarisierung vornehmen. Sie können weiterhin Anweisungen, Tonfall und andere Konfigurationen aktualisieren.",
+        "confirmButton": "Live schalten",
+        "cancelButton": "Abbrechen",
+        "consentLabel": "Ich bestätige, dass ich diesen CoachBot mit dem CoachBot-Support-Team überprüft und die notwendigen Anpassungen vorgenommen habe."
+      }
+    }
+  },
+  "General": {
+    "Header": {
+      "navigation": {
+        "0": "Chat",
+        "1": "Anweisungen",
+        "2": "Konfiguration"
+      }
+    },
+    "errors": {
+      "publishingLimitReached": "Du kannst in deinem aktuellen Tarif nur {limit} KI-Coach(es) veröffentlichen. Upgrade deinen Tarif, um mehr zu veröffentlichen."
+    }
+  },
+  "SMSIntegrationPage": {
+    "notConnectedTitle": "Nicht verbunden",
+    "connectedTitle": "Verbunden",
+    "notConnectedDescription": "SMS-Synchronisation wurde noch nicht aktiviert.",
+    "connectedDescription": "SMS-Synchronisation läuft live und reibungslos!"
+  }
+}

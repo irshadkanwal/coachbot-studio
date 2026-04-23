@@ -1,0 +1,33 @@
+{
+  "CoachDetails": {
+    "tooltips": {
+      "conversationsDisabled": "Nie masz zgody użytkownika końcowego na dostęp do tych danych konwersacji"
+    }
+  },
+  "Config": {
+    "sidebarOptions": {
+      "6": {
+        "title": "Integracja SMS",
+        "description": "Włącz dostęp SMS do swojego Trenera AI"
+      }
+    }
+  },
+  "General": {
+    "Header": {
+      "navigation": {
+        "0": "Pogawędzić",
+        "1": "Instrukcje",
+        "2": "Konfiguracja"
+      }
+    },
+    "errors": {
+      "publishingLimitReached": "W swoim aktualnym planie możesz opublikować tylko {limit} trenera(ów) AI. Ulepsz plan, aby publikować więcej."
+    }
+  },
+  "SMSIntegrationPage": {
+    "notConnectedTitle": "Nie połączono",
+    "connectedTitle": "Połączono",
+    "notConnectedDescription": "Synchronizacja SMS nie została jeszcze aktywowana.",
+    "connectedDescription": "Synchronizacja SMS jest aktywna i działa bez problemów!"
+  }
+}

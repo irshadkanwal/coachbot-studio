@@ -1,0 +1,34 @@
+http:
+  routers:
+    http:
+      rule: 'Host(`$DOMAIN_NAME`)'
+      service: http
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: '$DOMAIN_NAME'
+
+    redirect-dev-to-prod:
+      rule: 'Host(`dev-studio.coachbot.ai`)'
+      middlewares:
+        - redirect-dev-to-prod
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: 'dev-studio.coachbot.ai'
+      service: noop@internal
+
+  services:
+    http:
+      loadBalancer:
+        servers:
+          - url: 'http://studio-coachbotai:3000'
+
+  middlewares:
+    redirect-dev-to-prod:
+      redirectRegex:
+        regex: '^https?://dev-studio.coachbot.ai/(.*)'
+        replacement: 'https://studio.coachbot.ai/$${1}'
+        permanent: true
