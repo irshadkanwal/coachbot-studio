@@ -1,0 +1,33 @@
+{
+  "CoachDetails": {
+    "tooltips": {
+      "conversationsDisabled": "У вас немає згоди кінцевого користувача на доступ до цих даних розмови"
+    }
+  },
+  "Config": {
+    "sidebarOptions": {
+      "6": {
+        "title": "Інтеграція SMS",
+        "description": "Увімкнути SMS доступ до вашого ШІ Тренера"
+      }
+    }
+  },
+  "General": {
+    "Header": {
+      "navigation": {
+        "0": "Чат",
+        "1": "Інструкції",
+        "2": "Конфігурація"
+      }
+    },
+    "errors": {
+      "publishingLimitReached": "У вашому поточному плані можна опублікувати лише {limit} AI-тренера(ів). Оновіть свій план, щоб опублікувати більше."
+    }
+  },
+  "SMSIntegrationPage": {
+    "notConnectedTitle": "Не підключено",
+    "connectedTitle": "Підключено",
+    "notConnectedDescription": "Синхронізація SMS ще не була активована.",
+    "connectedDescription": "Синхронізація SMS активна і працює бездоганно!"
+  }
+}

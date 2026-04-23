@@ -1,0 +1,79 @@
+:root {
+  /* Light theme (by default) */
+  /* Primary colors */
+  --colors-main: 71, 63, 101;
+  --colors-background: 255, 255, 255;
+  --colors-background-border: 68, 63, 87;
+
+  --colors-light: 247, 250, 255;
+  --colors-graphic: 70, 70, 70;
+
+  --colors-dark-aquamarine: 62, 187, 167;
+  --colors-aquamarine: 76, 224, 179;
+  --colors-light-aquamarine: 170, 219, 207;
+
+  --colors-yellow: 237, 164, 81;
+  --colors-saffron: 242, 194, 0;
+  --colors-golden: 251, 229, 138;
+
+  --colors-light-gray: 123, 117, 146;
+  --colors-storm-gray: 135, 137, 169;
+  --colors-dark-gray: 214, 214, 214;
+  --colors-gunmetal: 255, 255, 255;
+
+  --colors-mauve: 215, 187, 253;
+  --colors-grape: 240, 225, 255;
+  --colors-violet-950: 255, 255, 255;
+
+  --colors-dark-blue: 255, 255, 255;
+
+  --colors-mint: 174, 251, 227;
+
+  --colors-salmon: 220, 90, 75;
+  --colors-blue: 57, 166, 227;
+
+  /* With opacity colors */
+  --colors-light-opacity: #ffffff70;
+  --colors-white-opacity: #ffffffa3;
+  --colors-bg-graphic: #46464624;
+}
+
+.dark {
+  /* Dark theme */
+  /* Primary colors */
+  --colors-main: 255, 255, 255;
+  --colors-background: 4, 0, 20;
+  --colors-background-border: 255, 255, 255;
+
+  --colors-light: 247, 250, 255;
+  --colors-graphic: 255, 255, 255;
+
+  --colors-dark-aquamarine: 58, 190, 184;
+  --colors-aquamarine: 76, 224, 179;
+  --colors-light-aquamarine: 170, 219, 207;
+
+  --colors-yellow: 241, 194, 1;
+  --colors-saffron: 242, 194, 0;
+  --colors-golden: 251, 229, 138;
+
+  --colors-light-gray: 182, 182, 182;
+  --colors-storm-gray: 114, 115, 121;
+  --colors-dark-gray: 57, 58, 68;
+  --colors-gunmetal: 46, 48, 56;
+
+  --colors-mauve: 215, 187, 253;
+  --colors-grape: 118, 55, 191;
+  --colors-violet-950: 4, 0, 20;
+
+  --colors-dark-blue: 11, 0, 51;
+
+  --colors-mint: 174, 251, 227;
+
+  --colors-salmon: 244, 121, 107;
+  --colors-blue: 85, 190, 249;
+
+  /* With opacity colors */
+  --colors-light-opacity: #ffffff08;
+  --colors-white-opacity: #ffffff14;
+  --colors-bg-graphic: #ffffff24;
+}

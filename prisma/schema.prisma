@@ -1,0 +1,381 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("POSTGRES_PRISMA_URL")
+  directUrl  = env("POSTGRES_URL_NON_POOLING")
+  extensions = [uuid_ossp(map: "uuid-ossp", schema: "public")]
+}
+
+model Chat {
+  id             String     @id @default(cuid())
+  name           String
+  userId         String
+  created_at     DateTime   @default(now()) @db.Timestamp(6)
+  currentStage   String?
+  lifeAreas      Json?
+  sessionSummary Json?
+  stageAnalysis  Json?
+  assistantId    String?    @db.Uuid
+  Assistant      Assistant? @relation(fields: [assistantId], references: [id])
+  User           User       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Messages       Message[]  @relation("ChatMessages")
+  Summary        Summary[]
+
+  @@index([lifeAreas], map: "idx_chat_life_areas_gin", type: Gin)
+  @@index([sessionSummary], map: "idx_chat_summary_gin", type: Gin)
+}
+
+model Message {
+  id              String   @id @default(cuid())
+  content         String
+  star            Boolean?
+  role            String
+  chatId          String
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+  type            String?
+  stage           String?
+  originalContent String?
+  stageAnalysis   String?
+  Chat            Chat     @relation("ChatMessages", fields: [chatId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model ModelConfig {
+  id                       Int                     @id(map: "model_configs_pkey") @default(autoincrement())
+  model                    String                  @db.VarChar(50)
+  temperature              Decimal                 @db.Decimal(3, 2)
+  top_p                    Decimal                 @db.Decimal(3, 2)
+  frequency_penalty        Decimal                 @db.Decimal(3, 2)
+  presence_penalty         Decimal                 @db.Decimal(3, 2)
+  created_at               DateTime?               @default(now()) @db.Timestamptz(6)
+  templateId               String?                 @db.Uuid
+  assistantConfigurationId String?                 @db.Uuid
+  AssistantConfiguration   AssistantConfiguration? @relation(fields: [assistantConfigurationId], references: [id])
+  Template                 Template?               @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([assistantConfigurationId], map: "idx_model_configs_assistantConfigurationId")
+}
+
+model ModerationRule {
+  id                       String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name                     String                  @db.VarChar(255)
+  created_at               DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?               @default(now()) @db.Timestamptz(6)
+  assistantConfigurationId String?                 @db.Uuid
+  allow_category           String?
+  input_score              Decimal?                @db.Decimal(3, 2)
+  output_score             Decimal?                @db.Decimal(3, 2)
+  response_examples        String?
+  AssistantConfiguration   AssistantConfiguration? @relation(fields: [assistantConfigurationId], references: [id])
+
+  @@index([assistantConfigurationId], map: "idx_moderation_rule_assistantConfigurationId")
+}
+
+model Stage {
+  id                       String                  @id(map: "Stages_pkey") @default(dbgenerated("nextval('stage_id_seq'::regclass)"))
+  name                     String
+  instructions             String?
+  analyzer                 String?
+  order                    Int
+  templateId               String?                 @db.Uuid
+  assistantConfigurationId String?                 @db.Uuid
+  AssistantConfiguration   AssistantConfiguration? @relation(fields: [assistantConfigurationId], references: [id])
+  Template                 Template?               @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([assistantConfigurationId], map: "idx_stage_assistantConfigurationId")
+}
+
+model Style {
+  id                       Int                     @id(map: "tones_pkey") @default(autoincrement())
+  tone                     String                  @db.VarChar(50)
+  emoji_frequency          String                  @db.VarChar(20)
+  language_complexity      String                  @db.VarChar(20)
+  greeting_templates       Json
+  response_patterns        Json
+  closing_templates        Json
+  created_at               DateTime?               @default(now()) @db.Timestamptz(6)
+  title                    String?
+  custom                   Boolean?                @default(false)
+  assistantConfigurationId String?                 @db.Uuid
+  AssistantConfiguration   AssistantConfiguration? @relation(fields: [assistantConfigurationId], references: [id])
+
+  @@index([assistantConfigurationId], map: "idx_style_assistantConfigurationId")
+}
+
+model Summary {
+  id                         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chatId                     String
+  stage                      String
+  key_points                 Json
+  insights                   Json
+  emotional_state            String?
+  progress_indicators        Json
+  stage_specific             Json
+  next_stage_recommendations Json
+  created_at                 DateTime? @default(now()) @db.Timestamp(6)
+  Chat                       Chat      @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([chatId], map: "idx_summary_chat_id")
+}
+
+model KnowledgeFile {
+  id          String   @id @default(cuid())
+  name        String
+  location    String?
+  status      String
+  uploaded_at DateTime @default(now()) @db.Timestamptz(6)
+  user_id     String
+  fileType    String   @default("knowledge")
+  User        User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Subscription {
+  id                 String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  subscriptionId     String?
+  customerId         String    @unique
+  name               String?
+  status             String
+  canceledAt         DateTime?
+  coaches            String?
+  analytics          String?
+  allowedIntegration Boolean?
+  trialDays          String?
+  userId             String    @unique
+  trialUsed          Boolean?
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_subscription_user_id")
+}
+
+model Preference {
+  id          String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  guidelines  String
+  toneOfVoice String
+  userId      String @unique
+  vector_db   String @default("")
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_preference_user_id")
+}
+
+model User {
+  id                String          @id
+  name              String?
+  email             String?
+  emailVerified     Boolean?
+  accessAllowed     Boolean?        @default(false)
+  onboardingPassed  Boolean?        @default(false)
+  consentAccepted   Boolean?
+  consentAcceptedAt DateTime?       @db.Timestamptz(6)
+  pictureUrl        String?
+  assistants        Assistant[]
+  Chat              Chat[]
+  KnowledgeFile     KnowledgeFile[]
+  preferences       Preference?
+  subscription      Subscription?
+}
+
+model PriceConfiguration {
+  id              String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  assistantMetaId String        @unique @db.Uuid
+  amount          Float?
+  monthly         Float
+  yearly          Float?
+  currency        String
+  trialDays       Int?
+  monthlyPriceId  String
+  stripeProductId String
+  yearlyPriceId   String?
+  created_at      DateTime?     @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime?     @updatedAt @db.Timestamptz(6)
+  assistantMeta   AssistantMeta @relation(fields: [assistantMetaId], references: [id], onDelete: Cascade)
+
+  @@index([assistantMetaId], map: "idx_price_assistantMetaId")
+}
+
+model AssistantFeedback {
+  id          String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  rating      Float
+  title       String
+  description String
+  userId      String?
+  userName    String?
+  assistantId String?    @db.Uuid
+  Assistant   Assistant? @relation(fields: [assistantId], references: [id])
+
+  @@index([assistantId], map: "idx_feedback_assistantId")
+}
+
+model AssistantMeta {
+  id                 String              @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  topics             String[]            @default([])
+  visibility         Visibility          @default(public)
+  accessLevel        AccessLevel         @default(free)
+  created_at         DateTime?           @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime?           @updatedAt @db.Timestamptz(6)
+  assistantId        String              @unique @db.Uuid
+  whatsapp           Boolean?
+  sms                Boolean?
+  revenueEnabled     Boolean?
+  communicationModes CommunicationMode[] @default([text_to_text, speech_to_text])
+  goalTrack          Boolean?
+  tokensLimit        Int?
+  usageType          AssistantUsageType? @default(unique)
+  goalVision         Boolean?
+  guardrailsEnable   Boolean?            @default(true)
+  assistant          Assistant           @relation(fields: [assistantId], references: [id], onDelete: Cascade)
+  price              PriceConfiguration?
+
+  @@index([visibility], map: "idx_assistant_meta_visibility")
+  @@index([assistantId], map: "idx_meta_assistantId")
+}
+
+model AssistantConfiguration {
+  id                 String           @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  instructions       String?
+  onboarding         String?
+  onboardingAnalyzer String?
+  assistantId        String           @unique @db.Uuid
+  templateId         String?          @db.Uuid
+  assistant          Assistant        @relation(fields: [assistantId], references: [id], onDelete: Cascade)
+  template           Template?        @relation(fields: [templateId], references: [id])
+  modelConfigs       ModelConfig[]
+  moderationRules    ModerationRule[]
+  stages             Stage[]
+  styles             Style[]
+
+  @@index([assistantId], map: "idx_configuration_assistantId")
+}
+
+model Assistant {
+  id                String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name              String
+  description       String
+  created_at        DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime?               @updatedAt @db.Timestamptz(6)
+  userId            String
+  status            String                  @default("draft")
+  accessMode        AssistantAccessMode     @default(full_access)
+  user              User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  configuration     AssistantConfiguration?
+  feedbacks         AssistantFeedback[]
+  meta              AssistantMeta?
+  twilioCredentials TwilioCredentials?
+  Category          Category[]
+  Chat              Chat[]
+  Goal              Goal[]
+
+  @@index([userId], map: "idx_assistant_userId")
+  @@index([status], map: "idx_assistant_status")
+}
+
+model Template {
+  id                     String                   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name                   String                   @unique
+  instructions           String                   @default("AI Coach instructions")
+  onboarding             String                   @default("New client onboarding instructions")
+  onboardingAnalyzer     String                   @default("Onboarding evaluation/transition analysis instructions")
+  AssistantConfiguration AssistantConfiguration[]
+  modelConfigs           ModelConfig[]
+  stages                 Stage[]
+}
+
+model Coach {
+  id          String   @id @default(uuid())
+  user_id     String
+  name        String
+  description String
+  knowledge   String[]
+  assessment  Json
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  edited_at   DateTime @updatedAt @db.Timestamptz(6)
+}
+
+model Goal {
+  id             String        @id @default(uuid())
+  title          String
+  frequency      GoalFrequency
+  repeatEvery    Int
+  monthlyRepeat  String?
+  weeklyRepeat   String[]
+  completionRule Json
+  completed      Boolean?
+  created_at     DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime      @updatedAt @db.Timestamptz(6)
+  assistantId    String        @db.Uuid
+  categoryId     String?       @db.Uuid
+  assistant      Assistant     @relation(fields: [assistantId], references: [id], onDelete: Cascade)
+  category       Category?     @relation(fields: [categoryId], references: [id])
+
+  @@index([assistantId], map: "idx_goal_assistantId")
+}
+
+model Category {
+  id          String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name        String
+  description String
+  isDefault   Boolean?
+  created_at  DateTime   @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime   @updatedAt @db.Timestamptz(6)
+  assistantId String?    @db.Uuid
+  assistant   Assistant? @relation(fields: [assistantId], references: [id], onDelete: Cascade)
+  goals       Goal[]
+
+  @@unique([name, assistantId])
+  @@index([assistantId], map: "idx_category_assistantId")
+  @@index([name, assistantId], map: "idx_category_name_assistant")
+  @@index([isDefault], map: "idx_category_isDefault")
+}
+
+model TwilioCredentials {
+  id             String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  assistantId    String    @unique @db.Uuid
+  accountSid     String    @db.VarChar(255)
+  authToken      String    @db.VarChar(255)
+  smsNumber      String    @db.VarChar(20)
+  whatsappNumber String?   @db.VarChar(20)
+  isActive       Boolean   @default(true)
+  created_at     DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime  @updatedAt @db.Timestamptz(6)
+  assistant      Assistant @relation(fields: [assistantId], references: [id], onDelete: Cascade)
+
+  @@index([assistantId], map: "idx_twilio_credentials_assistantId")
+  @@index([isActive], map: "idx_twilio_credentials_active")
+}
+
+enum GoalFrequency {
+  daily
+  weekly
+  monthly
+}
+
+enum Visibility {
+  public
+  private
+}
+
+enum AccessLevel {
+  free
+  premium
+}
+
+enum AssistantUsageType {
+  general
+  unique
+}
+
+enum CommunicationMode {
+  text_to_text
+  speech_to_text
+  voice_to_voice
+  video_avatar
+}
+
+enum AssistantAccessMode {
+  full_access
+  high_level
+  confidential
+}

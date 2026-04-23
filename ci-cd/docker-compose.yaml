@@ -1,0 +1,31 @@
+name: studio-coachbotai
+services:
+  studio-coachbotai:
+    image: ${IMAGE_TAG}
+    container_name: studio-coachbotai
+    restart: always
+    pull_policy: if_not_present
+    env_file:
+      - .env_app
+    networks:
+      - custom-network
+
+  traefik:
+    image: traefik:v3.3
+    container_name: traefik
+    restart: always
+    command:
+      - '--configFile=/etc/traefik/traefik.yaml'
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /home/deploy/studio-coachbotai/traefik.yaml:/etc/traefik/traefik.yaml
+      - /home/deploy/studio-coachbotai/dynamic.yaml:/etc/traefik/dynamic.yaml
+      - /home/deploy/studio-coachbotai/acme.json:/etc/traefik/acme.json
+    networks:
+      - custom-network
+
+networks:
+  custom-network:
+    name: custom-network
